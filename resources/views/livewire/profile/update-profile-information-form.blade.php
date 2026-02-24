@@ -50,11 +50,11 @@ $sendVerification = function () {
 
 <section>
     <header>
-        <h2 class="text-lg font-medium text-gray-900">
+        <h2 class="text-lg font-medium text-[#82BDED]">
             {{ __('Profile Information') }}
         </h2>
 
-        <p class="mt-1 text-sm text-gray-600">
+        <p class="mt-1 text-sm text-[#82BDED]">
             {{ __("Update your account's profile information and email address.") }}
         </p>
     </header>
@@ -73,10 +73,10 @@ $sendVerification = function () {
 
             @if (auth()->user() instanceof MustVerifyEmail && ! auth()->user()->hasVerifiedEmail())
                 <div>
-                    <p class="text-sm mt-2 text-gray-800">
+                    <p class="text-sm mt-2 text-#82BDED">
                         {{ __('Your email address is unverified.') }}
 
-                        <button wire:click.prevent="sendVerification" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        <button wire:click.prevent="sendVerification" class="underline text-sm text-[#82BDED] hover:text-[#82BDED] rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                             {{ __('Click here to re-send the verification email.') }}
                         </button>
                     </p>
