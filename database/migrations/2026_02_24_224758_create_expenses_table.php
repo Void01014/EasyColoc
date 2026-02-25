@@ -16,6 +16,8 @@ return new class extends Migration
             $table->foreignId('user_id');
             $table->foreignId('group_id');
             $table->string('name');
+            $table->text('description')->nullable();
+            $table->foreignId('category_id')->constrained();
             $table->decimal('amount', 10, 2);
             $table->timestamps();
         });
