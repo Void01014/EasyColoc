@@ -9,4 +9,11 @@ class Expense extends Model
 {
     /** @use HasFactory<\Database\Factories\ExpenseFactory> */
     use HasFactory;
+
+    public $fillable = ['user_id', 'group_id', 'name', 'description', 'category_id', 'amount'];
+
+    public function user()
+    {
+        return parent::belongsTo(User::class);
+    }
 }

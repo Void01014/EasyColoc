@@ -1,6 +1,6 @@
 @php
     // Mocking the Active Group
-    $group = (object) [
+    $activeGroup = $activeGroup ??(object) [
         'id' => 1,
         'name' => 'Marrakech Roadtrip',
         'owner_id' => 1, // Sarah is the owner
@@ -36,45 +36,16 @@
     ];
 
     // Mocking the Expense Ledger (Mission Logs)
-    $expenses = collect([
-        (object) [
-            'name' => 'Atlas Mountain Guide',
-            'amount' => 600.0,
-            'created_at' => now()->subHours(2),
-            'user' => (object) ['name' => 'Sarah Alami'],
-            'category' => (object) ['icon' => '🏔️'],
-        ],
-        (object) [
-            'name' => 'Tagine & Tea at Jemaa el-Fnaa',
-            'amount' => 245.5,
-            'created_at' => now()->subDays(1),
-            'user' => (object) ['name' => 'Yassine Tazi'],
-            'category' => (object) ['icon' => '🍲'],
-        ],
-        (object) [
-            'name' => 'Fuel (Total Station)',
-            'amount' => 450.0,
-            'created_at' => now()->subDays(2),
-            'user' => (object) ['name' => 'Mehdi Benani'],
-            'category' => (object) ['icon' => '⛽'],
-        ],
-        (object) [
-            'name' => 'Riad Deposit',
-            'amount' => 1200.0,
-            'created_at' => now()->subDays(4),
-            'user' => (object) ['name' => 'Sarah Alami'],
-            'category' => (object) ['icon' => '🏰'],
-        ],
-    ]);
+    $expenses = $expenses ?? collect([]);
 @endphp
 
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex items-center justify-between">
+        <div x-data={} class="flex items-center justify-between">
             <div class="flex items-center gap-4">
                 <a href="{{ route('dashboard') }}" class="text-[#3d4a7a] hover:text-[#6b82ff] transition-colors">←</a>
                 <h2 class="font-serif text-3xl text-[#f0f4ff] italic italic tracking-tight">
-                    {{ $group->name }}
+                    {{ $activeGroup->name }}
                 </h2>
             </div>
             <button @click="$dispatch('open-expense-modal')"
@@ -95,7 +66,7 @@
                 </h3>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    @foreach ($group->users as $member)
+                    @foreach ($activeGroup->users as $member)
                         <div
                             class="relative p-6 bg-[#0d1136]/40 border border-[#6b82ff]/10 rounded-[32px] backdrop-blur-md">
                             <div class="flex items-center gap-3 mb-6">
@@ -104,12 +75,12 @@
                                     {{ substr($member->name, 0, 1) }}
                                 </div>
                                 <span class="text-[#dde5ff] font-medium">{{ $member->name }}</span>
-                                @if ($member->id === $group->owner_id)
+                                @if ($member->id === $activeGroup->owner_id)
                                     <span class="text-yellow-400 text-sm" title="Sector Lead">✦</span>
                                 @endif
                             </div>
 
-                            <div class="space-y-4">
+                            {{-- <div class="space-y-4">
                                 @foreach ($member->balances as $balance)
                                     <div class="flex items-center justify-between group">
                                         <div class="flex items-center gap-2">
@@ -132,7 +103,7 @@
                                 @if (count($member->balances) === 0)
                                     <p class="text-[10px] italic text-[#3d4a7a] text-center py-2">No active ties.</p>
                                 @endif
-                            </div>
+                            </div> --}}
                         </div>
                     @endforeach
                 </div>
@@ -181,14 +152,14 @@
                         class="p-8 bg-gradient-to-b from-[#0d1136]/60 to-[#07091a]/40 border border-[#6b82ff]/10 rounded-[32px]">
                         <h4 class="text-[#dde5ff] font-serif text-xl mb-6 italic">Sector Personnel</h4>
                         <div class="space-y-4">
-                            @foreach ($group->users as $member)
+                            @foreach ($activeGroup->users as $member)
                                 <div class="flex items-center justify-between">
                                     <div class="flex items-center gap-3">
                                         <div
                                             class="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.4)]">
                                         </div>
                                         <span class="text-sm text-[#82BDED]">{{ $member->name }}</span>
-                                        @if ($member->id === $group->owner_id)
+                                        @if ($member->id === $activeGroup->owner_id)
                                             <span class="text-yellow-400 text-[10px]">✦</span>
                                         @endif
                                     </div>
@@ -210,5 +181,6 @@
             </section>
         </div>
     </div>
-    @livewire('group.invitemodal', ['group' => $group])
+    @livewire('group.invitemodal', ['group' => $activeGroup])
+    @livewire('group.expensemodal', ['group' => $activeGroup])
 </x-app-layout>

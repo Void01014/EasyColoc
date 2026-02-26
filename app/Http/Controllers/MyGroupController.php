@@ -9,8 +9,9 @@ class MyGroupController extends Controller
     public function view()
     {
         $user = auth()->user();
-        $activeGroup = $user->groups()->where('status', true)->first();
-
-        return view('MyGroup', compact('user', 'activeGroup'));
+        $activeGroup = $user->groups()->where('status', true)->with('users')->first();
+        $expenses = $activeGroup->expenses()->with('user')->get();
+        
+        return view('MyGroup', compact('user', 'activeGroup', 'expenses'));
     }
 }

@@ -13,7 +13,8 @@ use function Livewire\Volt\{state, rules, protect};
 
 state([
     'email' => '',
-    'group' => null
+    'group' => null,
+    'error' => false
 ]);
 
 rules([
@@ -22,18 +23,20 @@ rules([
 
 $sendInvite = function () {
     $this->validate();
+    $this->error = false;
 
-    $token = Str::random(64);
 
-    $group_members = Group::find(1)->users;
     $invited_user = User::where('email', $this->email)->first();
+    if ($invited_user) {
+        $isAlreadyMember = Group::find($this->group->id)->users()->where('user_id', $invited_user->id)->exists();
 
-    foreach($group_members as $member){
-        if($member->id == $invited_user->id){
-            abort(404, 'This user already belongs to another Sector');
+        if ($isAlreadyMember) {
+            $this->error = true;
+            return;
         }
     }
-    
+
+    $token = Str::random(64);
     Mail::to($this->email)->send(new Invitation($this->group->name, $token));
 
     $request = Request::create([
@@ -41,31 +44,31 @@ $sendInvite = function () {
         'group_id' => $this->group->id,
         'token' => $token,
     ]);
-    
+
     $this->dispatch('invite-sent');
-    
+
     $this->reset('email');
 };
 
 ?>
 
-<div x-data="{ open: false }" 
-     @open-invite-modal.window="open = true" 
-     @invite-sent.window="open = false"
-     class="relative z-[100]">
+<div x-data="{ open: false }"
+    @open-invite-modal.window="open = true"
+    @invite-sent.window="open = false"
+    class="relative z-[100]">
 
-    <div x-show="open" 
-         x-cloak
-         x-transition:enter="transition ease-out duration-300" 
-         x-transition:enter-start="opacity-0"
-         x-transition:enter-end="opacity-100" 
-         x-transition:leave="transition ease-in duration-200"
-         x-transition:leave-start="opacity-100" 
-         x-transition:leave-end="opacity-0"
-         class="fixed inset-0 bg-[#07091a]/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div x-show="open"
+        x-cloak
+        x-transition:enter="transition ease-out duration-300"
+        x-transition:enter-start="opacity-0"
+        x-transition:enter-end="opacity-100"
+        x-transition:leave="transition ease-in duration-200"
+        x-transition:leave-start="opacity-100"
+        x-transition:leave-end="opacity-0"
+        class="fixed inset-0 bg-[#07091a]/80 backdrop-blur-sm flex items-center justify-center p-4">
 
         <div @click.away="open = false"
-             class="relative w-full max-w-lg bg-gradient-to-br from-[#0d1136] to-[#07091a] border border-[#6b82ff]/30 rounded-[32px] p-8 shadow-[0_0_50px_rgba(107,130,255,0.15)] overflow-hidden">
+            class="relative w-full max-w-lg bg-gradient-to-br from-[#0d1136] to-[#07091a] border border-[#6b82ff]/30 rounded-[32px] p-8 shadow-[0_0_50px_rgba(107,130,255,0.15)] overflow-hidden">
 
             <div class="relative z-10">
                 <div class="text-center mb-8">
@@ -80,27 +83,30 @@ $sendInvite = function () {
                         <label for="email" class="block text-[10px] uppercase tracking-widest text-[#3d4a7a] font-bold mb-2 ml-1">
                             Email Address
                         </label>
-                        <input type="email" 
-                               wire:model="email" 
-                               id="email" 
-                               placeholder="user@example.com"
-                               class="w-full bg-[#07091a]/50 border border-[#6b82ff]/20 rounded-2xl px-5 py-4 text-[#dde5ff] placeholder-[#3d4a7a] focus:outline-none focus:border-[#6b82ff] focus:ring-1 focus:ring-[#6b82ff] transition-all">
-                        
+                        <input type="email"
+                            wire:model="email"
+                            id="email"
+                            placeholder="user@example.com"
+                            class="w-full bg-[#07091a]/50 border border-[#6b82ff]/20 rounded-2xl px-5 py-4 text-[#dde5ff] placeholder-[#3d4a7a] focus:outline-none focus:border-[#6b82ff] focus:ring-1 focus:ring-[#6b82ff] transition-all">
+
                         @error('email')
-                            <span class="text-red-400 text-[10px] mt-2 ml-1 uppercase tracking-wider">{{ $message }}</span>
+                        <span class="text-red-400 text-[10px] mt-2 ml-1 uppercase tracking-wider">{{ $message }}</span>
                         @enderror
                     </div>
+                    @if($error)
+                    <h2>This User Is Already In a Sector</h2>
+                    @endif
 
                     <div class="flex flex-col gap-3 pt-4">
-                        <button type="submit" 
-                                wire:loading.attr="disabled"
-                                class="w-full py-4 bg-[#6b82ff] hover:bg-[#4d63f5] text-white rounded-2xl text-xs font-bold uppercase tracking-widest transition-all active:scale-95 disabled:opacity-50">
+                        <button type="submit"
+                            wire:loading.attr="disabled"
+                            class="w-full py-4 bg-[#6b82ff] hover:bg-[#4d63f5] text-white rounded-2xl text-xs font-bold uppercase tracking-widest transition-all active:scale-95 disabled:opacity-50">
                             <span wire:loading.remove>Send Invitation</span>
                             <span wire:loading>Sending...</span>
                         </button>
-                        
+
                         <button type="button" @click="open = false"
-                                class="w-full py-4 text-[#3d4a7a] hover:text-[#82BDED] text-[10px] font-bold uppercase tracking-widest transition-colors">
+                            class="w-full py-4 text-[#3d4a7a] hover:text-[#82BDED] text-[10px] font-bold uppercase tracking-widest transition-colors">
                             Cancel
                         </button>
                     </div>
