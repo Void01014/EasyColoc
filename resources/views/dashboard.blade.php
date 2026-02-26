@@ -6,8 +6,6 @@
     $unpaidCount = 3;
     $reputation = 12;
 
-    // A user can only be in one group at a time
-    $activeGroup = null;
 
     $latestExpenses = collect([
         (object) [
@@ -103,7 +101,7 @@
                             <p class="text-[10px] uppercase tracking-[0.2em] text-[#82BDED] font-black">Astral
                                 Reputation</p>
                             <p class="text-2xl font-serif text-[#dde5ff]">
-                                {{ $reputation }} <span class="text-xs font-sans italic opacity-50 ml-1">Score</span>
+                                {{ $user->reputation }} <span class="text-xs font-sans italic opacity-50 ml-1">Score</span>
                             </p>
                         </div>
                     </div>
@@ -209,7 +207,7 @@
                                 </div>
 
                                 <div class="flex flex-wrap gap-4 pt-4 border-t border-white/5">
-                                    <a href="#"
+                                    <a href="{{ route('myGroup.view') }}"
                                         class="px-6 py-3 bg-[#6b82ff] hover:bg-[#4d63f5] text-white rounded-xl text-xs font-bold uppercase tracking-widest transition-all shadow-[0_10px_20px_rgba(107,130,255,0.2)]">
                                         Open Sector Console
                                     </a>
@@ -227,11 +225,11 @@
                             <h4 class="text-[#dde5ff] font-serif text-xl italic mb-2">No Active Constellation</h4>
                             <p class="text-[#3d4a7a] text-sm max-w-xs mx-auto mb-8">Join a group to start logging
                                 expenses and building your astral reputation.</p>
-                            <div class="flex justify-center gap-4">
-                                <a href="#"
-                                    class="px-8 py-3 bg-[#6b82ff]/30 border border-[#6b82ff]/30 text-black-800/2 rounded-xl text-xs font-bold uppercase tracking-widest hover:bg-[#6b82ff] transition-all">
-                                    Create a Sector
-                                </a href="#">
+                            <div x-data={} class="flex justify-center gap-4">
+                                <button @click="$dispatch('open-sector-modal')"
+                                    class="px-6 py-2.5 bg-gradient-to-br from-[#4d63f5] to-[#3448d6] rounded-xl text-white text-xs font-bold uppercase tracking-widest shadow-[0_0_20px_rgba(77,99,245,0.3)]">
+                                    + New Sector
+                                </button>
                                 <a href="#"
                                     class="px-8 py-3 bg-white/5 border border-[#6b82ff]/30 text-[#6b82ff] rounded-xl text-xs font-bold uppercase tracking-widest hover:bg-[#6b82ff]/10 transition-all">
                                     Find a Sector
@@ -289,4 +287,5 @@
             </div>
         </div>
     </div>
+    @livewire('group.groupmodal')
 </x-app-layout>

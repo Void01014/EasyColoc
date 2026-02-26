@@ -11,9 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('categoris', function (Blueprint $table){
-            $table->id();
-            $table->string('name');
+        Schema::table('users', function (Blueprint $table) {
+            $table->integer('reputation')->default(0);
         });
     }
 
@@ -22,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::table('users', function (Blueprint $table) {
+            //
+        });
     }
 };

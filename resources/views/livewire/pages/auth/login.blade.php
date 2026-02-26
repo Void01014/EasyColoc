@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Session;
 use function Livewire\Volt\form;
 use function Livewire\Volt\layout;
 
-layout('layouts.guest'); // Ensure your layout has the CSS/Scripts provided below
+layout('layouts.guest');
 
 form(LoginForm::class);
 

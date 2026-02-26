@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class MyGroupController extends Controller
+class InvitationController extends Controller
 {
     public function view()
     {
