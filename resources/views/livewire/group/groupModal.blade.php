@@ -16,9 +16,7 @@ new class extends Component {
             'name' => $this->name,
         ]);
 
-        auth()->user()->groups()->attach($group->id, [
-            'role' => 'owner'
-        ]);
+        $group->addUser('owner');
 
         $this->dispatch('sector-created');
         $this->reset('name');
@@ -59,8 +57,8 @@ new class extends Component {
                         <input type="text" wire:model="name" id="name" placeholder="e.g. Marrakech Roadtrip..."
                             class="w-full bg-[#07091a]/50 border border-[#6b82ff]/20 rounded-2xl px-5 py-4 text-[#dde5ff] placeholder-[#3d4a7a] focus:outline-none focus:border-[#6b82ff] focus:ring-1 focus:ring-[#6b82ff] transition-all">
                         @error('name')
-                            <span
-                                class="text-red-400 text-[10px] mt-2 ml-1 uppercase tracking-wider">{{ $message }}</span>
+                        <span
+                            class="text-red-400 text-[10px] mt-2 ml-1 uppercase tracking-wider">{{ $message }}</span>
                         @enderror
                     </div>
 

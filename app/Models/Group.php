@@ -16,4 +16,15 @@ class Group extends Model
     {
         return $this->belongsToMany(User::class, 'group_user');
     }
+
+    public function requests()
+    {
+        return $this->hasMany(Request::class);
+    }
+
+    public function addUser($role){
+        auth()->user()->groups()->attach($this->id, [
+            'role' => $role
+        ]);
+    }
 }

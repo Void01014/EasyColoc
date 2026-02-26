@@ -1,4 +1,4 @@
-<x-guest-layout>
+<x-app-layout>
     <div class="min-h-screen flex items-center justify-center bg-[#07091a] relative overflow-hidden px-4">
         
         <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-[#6b82ff]/10 rounded-full blur-[120px] pointer-events-none"></div>
@@ -25,12 +25,12 @@
                 
                 <div class="py-3 px-4 bg-white/5 rounded-2xl border border-white/5 inline-block">
                     <span class="text-[9px] text-[#3d4a7a] font-bold uppercase tracking-widest block">Linked Token</span>
-                    <span class="text-[11px] text-[#6b82ff] font-mono opacity-80 uppercase tracking-tighter">{{ Str::limit($token, 12) }}...</span>
+                    <span class="text-[11px] text-[#6b82ff] font-mono opacity-80 uppercase tracking-wide">{{ Str::limit($token, 12) }}...</span>
                 </div>
             </div>
 
             <div class="space-y-4">
-                <form action="{{ route('groups.handle-invite') }}" method="POST">
+                <form action="{{ route('invitation.handle-invite') }}" method="POST">
                     @csrf
                     <input type="hidden" name="token" value="{{ $token }}">
                     <input type="hidden" name="action" value="accept">
@@ -40,7 +40,7 @@
                     </button>
                 </form>
 
-                <form action="{{ route('groups.handle-invite') }}" method="POST">
+                <form action="{{ route('invitation.handle-invite') }}" method="POST">
                     @csrf
                     <input type="hidden" name="token" value="{{ $token }}">
                     <input type="hidden" name="action" value="decline">
@@ -49,12 +49,6 @@
                         Decline Transmission
                     </button>
                 </form>
-            </div>
-
-            <div class="mt-12 text-center pt-6 border-t border-white/5">
-                <p class="text-[9px] text-[#3d4a7a] font-bold uppercase tracking-widest italic">
-                    Stationed in Rabat • Sidi Ghouzia Gateway
-                </p>
             </div>
         </div>
     </div>
@@ -65,4 +59,4 @@
             to { opacity: 1; transform: translateY(0) scale(1); }
         }
     </style>
-</x-guest-layout>
+</x-app-layout>

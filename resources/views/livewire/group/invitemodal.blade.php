@@ -2,6 +2,10 @@
 
 use App\Mail\invitation;
 use App\Models\Group;
+use App\Models\Request;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Pest\Support\Str;
 
@@ -9,7 +13,7 @@ use function Livewire\Volt\{state, rules, protect};
 
 state([
     'email' => '',
-    'group_name' => ''
+    'group' => null
 ]);
 
 rules([
@@ -21,9 +25,24 @@ $sendInvite = function () {
 
     $token = Str::random(64);
 
-    Mail::to($this->email)->send(new Invitation($this->group_name, $token));
+    $group_members = Group::find(1)->users;
+    $invited_user = User::where('email', $this->email)->first();
 
-    $this->dispatch('sector-created');
+    foreach($group_members as $member){
+        if($member->id == $invited_user->id){
+            abort(404, 'This user already belongs to another Sector');
+        }
+    }
+    
+    Mail::to($this->email)->send(new Invitation($this->group->name, $token));
+
+    $request = Request::create([
+        'user_id' => Auth::id(),
+        'group_id' => $this->group->id,
+        'token' => $token,
+    ]);
+    
+    $this->dispatch('invite-sent');
     
     $this->reset('email');
 };
@@ -32,7 +51,7 @@ $sendInvite = function () {
 
 <div x-data="{ open: false }" 
      @open-invite-modal.window="open = true" 
-     @sector-created.window="open = false"
+     @invite-sent.window="open = false"
      class="relative z-[100]">
 
     <div x-show="open" 

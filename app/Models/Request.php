@@ -9,4 +9,16 @@ class Request extends Model
 {
     /** @use HasFactory<\Database\Factories\RequestFactory> */
     use HasFactory;
+
+    public $fillable = ['user_id', 'group_id', 'token'];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function group()
+    {
+        return $this->belongsTo(Group::class);
+    }
 }

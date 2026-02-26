@@ -6,7 +6,6 @@
     $unpaidCount = 3;
     $reputation = 12;
 
-
     $latestExpenses = collect([
         (object) [
             'name' => 'Organic Coffee',
@@ -36,6 +35,11 @@
 @endphp
 
 <x-app-layout>
+    @if (session('status'))
+        <div class="alert alert-success">
+            {{ session('status') }}
+        </div>
+    @endif
     <x-slot name="header">
         <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
             <div>
@@ -101,7 +105,8 @@
                             <p class="text-[10px] uppercase tracking-[0.2em] text-[#82BDED] font-black">Astral
                                 Reputation</p>
                             <p class="text-2xl font-serif text-[#dde5ff]">
-                                {{ $user->reputation }} <span class="text-xs font-sans italic opacity-50 ml-1">Score</span>
+                                {{ $user->reputation }} <span
+                                    class="text-xs font-sans italic opacity-50 ml-1">Score</span>
                             </p>
                         </div>
                     </div>
