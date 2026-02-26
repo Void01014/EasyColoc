@@ -11,6 +11,6 @@ class InvitationController extends Controller
         $user = auth()->user();
         $activeGroup = $user->groups()->where('status', true)->first();
 
-        return view('MyGroup', compact('user', 'activeGroup'));
+        return view('invitation', compact('user', 'activeGroup'));
     }
 }

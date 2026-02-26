@@ -210,5 +210,5 @@
             </section>
         </div>
     </div>
-    @livewire('group.invitemodal')
+    @livewire('group.invitemodal', ['group_name' => $group->name])
 </x-app-layout>

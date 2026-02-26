@@ -34,7 +34,7 @@
                                 You’ve been invited to sync your expenses and manage the ledger for this mission.
                             </p>
 
-                            <a href="{{ route('groups.accept', ['token' => $token]) }}" 
+                            <a href="{{ route('invitation.view', ['token' => $token, 'group_name' => $group_name]) }}" 
                                style="display: inline-block; background-color: #6b82ff; color: #ffffff; padding: 18px 36px; border-radius: 16px; text-decoration: none; font-weight: bold; font-size: 13px; text-transform: uppercase; letter-spacing: 0.15em; font-family: sans-serif; box-shadow: 0 10px 20px rgba(107, 130, 255, 0.25);">
                                 Establish Connection
                             </a>
