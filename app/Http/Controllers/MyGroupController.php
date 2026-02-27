@@ -11,9 +11,8 @@ class MyGroupController extends Controller
     {
         $user = auth()->user();
         $activeGroup = $user->groups()->where('status', true)->with('users')->first();
-        $expenses = $activeGroup->expenses()->with('user')->get();
         $categories = Category::getCategories($activeGroup);
 
-        return view('MyGroup', compact('user', 'activeGroup', 'expenses', 'categories'));
+        return view('MyGroup', compact('user', 'activeGroup', 'categories'));
     }
 }

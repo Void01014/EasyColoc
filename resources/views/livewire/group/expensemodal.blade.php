@@ -35,8 +35,6 @@ $saveExpense = function () {
 
     $this->dispatch('expense-saved');
     $this->reset(['name', 'amount', 'category_id', 'description']);
-
-    return redirect(request()->fullUrl());
 };
 
 ?>

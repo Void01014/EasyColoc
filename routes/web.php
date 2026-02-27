@@ -9,7 +9,7 @@ use Livewire\Volt\Volt;
 
 
 Route::middleware('auth')->group(function () {
-    Route::view('/', 'dashboard');
+    Route::get('/', [DashboardController::class, 'view']);
     Route::get('myGroup', [MyGroupController::class, 'view'])->name('myGroup.view');
     Route::get('dashboard', [DashboardController::class, 'view'])->name('dashboard');
     Route::get('invitation/{token}', [InvitationController::class, 'view'])->name('invitation.view');

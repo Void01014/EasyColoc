@@ -27,6 +27,7 @@ $sendInvite = function () {
 
 
     $invited_user = User::where('email', $this->email)->first();
+    
     if ($invited_user) {
         $isAlreadyMember = Group::find($this->group->id)->users()->where('user_id', $invited_user->id)->exists();
 
@@ -40,7 +41,7 @@ $sendInvite = function () {
     Mail::to($this->email)->send(new Invitation($this->group->name, $token));
 
     $request = Request::create([
-        'user_id' => Auth::id(),
+        'user_id' => $invited_user->id,
         'group_id' => $this->group->id,
         'token' => $token,
     ]);
