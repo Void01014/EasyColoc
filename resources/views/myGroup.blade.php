@@ -77,7 +77,7 @@
                                     {{ substr($member->name, 0, 1) }}
                                 </div>
                                 <span class="text-[#dde5ff] font-medium">{{ $member->name }}</span>
-                                @if ($member->id === $activeGroup->owner_id)
+                                @if ($member->pivot->role === "owner")
                                     <span class="text-yellow-400 text-sm" title="Sector Lead">✦</span>
                                 @endif
                             </div>
@@ -128,7 +128,7 @@
                                             class="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.4)]">
                                         </div>
                                         <span class="text-sm text-[#82BDED]">{{ $member->name }}</span>
-                                        @if ($member->id === $activeGroup->owner_id)
+                                        @if ($member->pivot->role === "owner")
                                             <span class="text-yellow-400 text-[10px]">✦</span>
                                         @endif
                                     </div>

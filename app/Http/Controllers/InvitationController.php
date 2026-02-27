@@ -16,9 +16,6 @@ class InvitationController extends Controller
         $invitation = RequestModel::where('token', $token)->first();
 
         $group = $invitation?->group;
-        // var_dump($group);
-        // dd('s');
-
         return view('invitation', compact('user', 'token', 'group_name'));
     }
 

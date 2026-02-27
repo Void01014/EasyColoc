@@ -29,8 +29,7 @@ $sendInvite = function () {
     $invited_user = User::where('email', $this->email)->first();
     
     if ($invited_user) {
-        $isAlreadyMember = Group::find($this->group->id)->users()->where('user_id', $invited_user->id)->exists();
-
+        $isAlreadyMember = $invited_user->groups()->where('status', true)->exists();
         if ($isAlreadyMember) {
             $this->error = true;
             return;
