@@ -6,10 +6,10 @@ use App\Http\Controllers\MyGroupController;
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
 
-Route::view('/', 'dashboard');
 
 
 Route::middleware('auth')->group(function () {
+    Route::view('/', 'dashboard');
     Route::get('myGroup', [MyGroupController::class, 'view'])->name('myGroup.view');
     Route::get('dashboard', [DashboardController::class, 'view'])->name('dashboard');
     Route::get('invitation/{token}', [InvitationController::class, 'view'])->name('invitation.view');

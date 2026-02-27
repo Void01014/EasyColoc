@@ -182,5 +182,5 @@
         </div>
     </div>
     @livewire('group.invitemodal', ['group' => $activeGroup])
-    @livewire('group.expensemodal', ['group' => $activeGroup])
+    @livewire('group.expensemodal', ['group' => $activeGroup, 'categories' => $categories])
 </x-app-layout>

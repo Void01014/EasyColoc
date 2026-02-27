@@ -7,14 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 class Category extends Model
 {
 
-    public function group(){
+    public function group()
+    {
         return $this->belongsTo(Group::class);
     }
-    public static function getCategories($group){
-        $group_cags = Category::doesntHave('group')->get();
-
-        var_dump($group_cags);
-        dd($group_cags);
-        // return array_merge($cags, $group_cags);
+    public static function getCategories($group)
+    {
+        return Category::whereNull('group_id')
+            ->orWhere('group_id', $group->id)
+            ->get();
     }
 }

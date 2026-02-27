@@ -7,7 +7,7 @@ use function Livewire\Volt\{state, rules};
 
 state([
     'group' => null,
-    'categories' => fn() => Category::all(),
+    'categories' => [],
     'name' => '',
     'amount' => '',
     'category_id' => '',
