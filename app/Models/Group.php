@@ -26,6 +26,10 @@ class Group extends Model
         return $this->hasMany(Expense::class);
     }
 
+    public function categories(){
+        return $this->hasMany(Category::class);
+    }
+
     public function addUser($role){
         auth()->user()->groups()->attach($this->id, [
             'role' => $role
