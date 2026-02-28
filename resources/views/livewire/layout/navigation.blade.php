@@ -30,7 +30,7 @@ $logout = function (Logout $logout) {
                     </x-nav-link>
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('myGroup.view')" :active="request()->routeIs('dashboard')" wire:navigate
+                    <x-nav-link :href="route('myGroup.view')" :active="request()->routeIs('myGroup.view')" wire:navigate
                         class="text-indigo-500 hover:text-gray-400 active:text-[#dde5ff] transition-colors uppercase text-[11px] tracking-[0.2em] font-bold">
                         {{ __('My Group') }}
                     </x-nav-link>
@@ -91,6 +91,9 @@ $logout = function (Logout $logout) {
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate class="text-[#dde5ff]">
                 {{ __('Dashboard') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('myGroup.view')" :active="request()->routeIs('myGroup.view')" wire:navigate class="text-[#dde5ff]">
+                {{ __('My Group') }}
             </x-responsive-nav-link>
         </div>
 

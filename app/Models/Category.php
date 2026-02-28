@@ -14,7 +14,7 @@ class Category extends Model
     public static function getCategories($group)
     {
         return Category::whereNull('group_id')
-            ->orWhere('group_id', $group->id)
+            ->orWhere('group_id', $group?->id)
             ->get();
     }
 }

@@ -8,13 +8,16 @@ use function Livewire\Volt\{computed, state, mount, on};
 state(['group']);
 
 $expenses = computed(function () {
+    if (! $this->group) {
+        return collect();
+    }
+
     return $this->group
         ->expenses()
         ->with(['user', 'category'])
         ->latest()
         ->get();
 });
-
 on([
     'expense-saved' => '$refresh',
 ]);

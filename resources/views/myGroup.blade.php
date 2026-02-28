@@ -1,46 +1,3 @@
-@php
-    // Mocking the Active Group
-    $activeGroup =
-        $activeGroup ??
-        (object) [
-            'id' => 1,
-            'name' => 'Marrakech Roadtrip',
-            'owner_id' => 1, // Sarah is the owner
-            'users' => collect([
-                (object) [
-                    'id' => 1,
-                    'name' => 'Sarah Alami',
-                    'reputation' => 24,
-                    'balances' => [
-                        ['target_name' => 'Yassine', 'amount' => 150.0], // Sarah is owed $150
-                        ['target_name' => 'Mehdi', 'amount' => -45.0], // Sarah owes Mehdi $45
-                    ],
-                ],
-                (object) [
-                    'id' => 2,
-                    'name' => 'Yassine Tazi',
-                    'reputation' => 15,
-                    'balances' => [
-                        ['target_name' => 'Sarah', 'amount' => -150.0], // Yassine owes Sarah $150
-                        ['target_name' => 'Mehdi', 'amount' => 20.0], // Yassine is owed $20 by Mehdi
-                    ],
-                ],
-                (object) [
-                    'id' => 3,
-                    'name' => 'Mehdi Benani',
-                    'reputation' => 18,
-                    'balances' => [
-                        ['target_name' => 'Sarah', 'amount' => 45.0], // Mehdi is owed $45 by Sarah
-                        ['target_name' => 'Yassine', 'amount' => -20.0], // Mehdi owes Yassine $20
-                    ],
-                ],
-            ]),
-        ];
-
-    // Mocking the Expense Ledger (Mission Logs)
-    $expenses = $expenses ?? collect([]);
-@endphp
-
 <x-app-layout>
     <x-slot name="header">
         <div x-data={} class="flex items-center justify-between">
@@ -77,35 +34,67 @@
                                     {{ substr($member->name, 0, 1) }}
                                 </div>
                                 <span class="text-[#dde5ff] font-medium">{{ $member->name }}</span>
-                                @if ($member->pivot->role === "owner")
+                                @if ($member->pivot->role === 'owner')
                                     <span class="text-yellow-400 text-sm" title="Sector Lead">✦</span>
                                 @endif
                             </div>
 
-                            {{-- <div class="space-y-4">
-                                @foreach ($member->balances as $balance)
-                                    <div class="flex items-center justify-between group">
-                                        <div class="flex items-center gap-2">
-                                            @if ($balance['amount'] > 0)
-                                                <span class="text-emerald-400 font-bold">──▶</span>
-                                            @else
-                                                <span class="text-yellow-400 font-bold">◀──</span>
-                                            @endif
-                                            <span class="text-xs text-[#82BDED] opacity-60 uppercase tracking-tighter">
-                                                {{ $balance['target_name'] }}
-                                            </span>
-                                        </div>
-                                        <span
-                                            class="font-serif text-sm {{ $balance['amount'] > 0 ? 'text-emerald-400' : 'text-yellow-400' }}">
-                                            ${{ number_format(abs($balance['amount']), 2) }}
-                                        </span>
-                                    </div>
-                                @endforeach
+                            <div class="space-y-4">
+                                <div class="space-y-3">
+                                    @forelse ($settlements[$member->id] as $settlement)
+                                        <div
+                                            class="relative group flex items-center justify-between p-3 rounded-2xl bg-white/[0.02] border border-white/[0.05] hover:border-[#6b82ff]/30 hover:bg-[#6b82ff]/5 transition-all duration-300">
 
-                                @if (count($member->balances) === 0)
-                                    <p class="text-[10px] italic text-[#3d4a7a] text-center py-2">No active ties.</p>
-                                @endif
-                            </div> --}}
+                                            <div class="flex items-center gap-3">
+                                                <div class="relative flex items-center">
+                                                    @if ($settlement['amount'] > 0)
+                                                        {{-- Energy Flow Out --}}
+                                                        <div class="flex items-center">
+                                                            <div
+                                                                class="w-8 h-[1px] bg-gradient-to-r from-emerald-500 to-transparent">
+                                                            </div>
+                                                            <div class="text-emerald-500 text-[10px] animate-pulse">▶
+                                                            </div>
+                                                        </div>
+                                                    @else
+                                                        {{-- Energy Flow In --}}
+                                                        <div class="flex items-center">
+                                                            <div class="text-yellow-500 text-[10px] animate-pulse">◀
+                                                            </div>
+                                                            <div
+                                                                class="w-8 h-[1px] bg-gradient-to-l from-yellow-500 to-transparent">
+                                                            </div>
+                                                        </div>
+                                                    @endif
+                                                </div>
+
+                                                <div class="flex flex-col">
+                                                    <span
+                                                        class="text-[9px] uppercase tracking-widest text-[#3d4a7a] font-bold group-hover:text-[#82BDED] transition-colors">
+                                                        {{ $settlement['amount'] > 0 ? 'Receiving from' : 'Sending to' }}
+                                                    </span>
+                                                    <span class="text-xs text-[#dde5ff] font-medium tracking-tight">
+                                                        {{ $settlement['to_name'] }}
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            <div class="text-right">
+                                                <span
+                                                    class="font-serif text-sm {{ $settlement['amount'] > 0 ? 'text-emerald-400' : 'text-yellow-400' }} drop-shadow-[0_0_8px_rgba(107,130,255,0.2)]">
+                                                    ${{ number_format(abs($settlement['amount']), 2) }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    @empty
+                                        <div class="py-6 flex flex-col items-center justify-center opacity-40">
+                                            <span class="text-xl mb-1">✧</span>
+                                            <p class="text-[10px] uppercase tracking-widest text-[#3d4a7a] font-bold">
+                                                Orbital Equilibrium</p>
+                                        </div>
+                                    @endforelse
+                                </div>
+                            </div>
                         </div>
                     @endforeach
                 </div>
@@ -128,7 +117,7 @@
                                             class="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.4)]">
                                         </div>
                                         <span class="text-sm text-[#82BDED]">{{ $member->name }}</span>
-                                        @if ($member->pivot->role === "owner")
+                                        @if ($member->pivot->role === 'owner')
                                             <span class="text-yellow-400 text-[10px]">✦</span>
                                         @endif
                                     </div>

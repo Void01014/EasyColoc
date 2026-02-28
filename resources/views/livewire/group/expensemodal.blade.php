@@ -11,6 +11,7 @@ state([
     'categories' => [],
     'name' => '',
     'amount' => '',
+    'date' => date('Y-m-d'), // Added date state
     'category_id' => '',
     'description' => '',
 ]);
@@ -18,6 +19,7 @@ state([
 rules([
     'name' => 'required|min:3|max:50',
     'amount' => 'required|numeric|min:0.01',
+    'date' => 'required|date', // Added date validation
     'category_id' => 'required|exists:categories,id',
     'description' => 'nullable|string',
 ]);
@@ -32,6 +34,7 @@ $saveExpense = function () {
         'group_id' => $this->group->id,
         'name' => $this->name,
         'amount' => $this->amount,
+        'date' => $this->date, // Added to creation
         'category_id' => $this->category_id,
         'description' => $this->description,
     ]);
@@ -40,7 +43,7 @@ $saveExpense = function () {
 
 
     $this->dispatch('expense-saved');
-    $this->reset(['name', 'amount', 'category_id', 'description']);
+    $this->reset(['name', 'amount', 'date', 'category_id', 'description']); // Added date to reset
 };
 
 ?>
@@ -78,16 +81,23 @@ $saveExpense = function () {
                     </div>
 
                     <div>
-                        <label class="block text-[10px] uppercase tracking-widest text-[#3d4a7a] font-bold mb-2 ml-1">Category</label>
-                        <select wire:model="category_id"
-                            class="w-full bg-[#07091a]/50 border border-[#6b82ff]/20 rounded-2xl px-5 py-3 text-[#dde5ff] focus:border-[#6b82ff] focus:ring-0 transition-all">
-                            <option value="">Select Category</option>
-                            @foreach($categories as $category)
-                            <option value="{{ $category->id }}">{{ $category->name }}</option>
-                            @endforeach
-                        </select>
-                        @error('category_id') <span class="text-red-400 text-[10px] mt-1">{{ $message }}</span> @enderror
+                        <label class="block text-[10px] uppercase tracking-widest text-[#3d4a7a] font-bold mb-2 ml-1">Date</label>
+                        <input type="date" wire:model="date"
+                            class="w-full bg-[#07091a]/50 border border-[#6b82ff]/20 rounded-2xl px-5 py-3 text-[#dde5ff] focus:border-[#6b82ff] focus:ring-0 transition-all [color-scheme:dark]">
+                        @error('date') <span class="text-red-400 text-[10px] mt-1">{{ $message }}</span> @enderror
                     </div>
+                </div>
+
+                <div>
+                    <label class="block text-[10px] uppercase tracking-widest text-[#3d4a7a] font-bold mb-2 ml-1">Category</label>
+                    <select wire:model="category_id"
+                        class="w-full bg-[#07091a]/50 border border-[#6b82ff]/20 rounded-2xl px-5 py-3 text-[#dde5ff] focus:border-[#6b82ff] focus:ring-0 transition-all">
+                        <option value="">Select Category</option>
+                        @foreach($categories as $category)
+                        <option value="{{ $category->id }}">{{ $category->name }}</option>
+                        @endforeach
+                    </select>
+                    @error('category_id') <span class="text-red-400 text-[10px] mt-1">{{ $message }}</span> @enderror
                 </div>
 
                 <div>

@@ -12,7 +12,7 @@ class DashboardController extends Controller
 {
     public function view(){
         $user = auth()->user();
-        $activeGroup = $user->groups()->where('status', true)->first();
+        $activeGroup = $user->groups()->where('status', true)->with('users.payments')->first();
         $categories = Category::getCategories($activeGroup);
 
         return view('dashboard', compact('user', 'activeGroup', 'categories'));

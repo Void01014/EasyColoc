@@ -8,6 +8,10 @@ use function Livewire\Volt\{computed, state, mount, on};
 state(['user', 'group', 'unpaidCount' => ($unpaidCount = 3)]);
 
 $total_debt = computed(function () {
+    if (! $this->group) {
+        return 0;
+    }
+
     return $this->group->expenses()->sum('amount');
 });
 
@@ -70,7 +74,7 @@ on([
             @if ($group)
                 <div
                     class="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl {{ $unpaidCount > 0 ? 'bg-red-500/10 text-red-400' : 'bg-blue-500/10 text-blue-400' }}">
-                    {{ $unpaidCount }}
+                    {{ 3 }}
                 </div>
                 <div>
                     <p class="text-[10px] uppercase tracking-[0.2em] text-[#82BDED] font-black">Unpaid
