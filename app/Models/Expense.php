@@ -10,6 +10,12 @@ class Expense extends Model
     /** @use HasFactory<\Database\Factories\ExpenseFactory> */
     use HasFactory;
 
+    // App\Models\Expense.php
+    protected $casts = [
+        'date' => 'date',
+        'amount' => 'decimal:2'
+    ];
+
     public $fillable = ['user_id', 'group_id', 'name', 'description', 'category_id', 'amount', 'created_at'];
 
     public function user()
@@ -29,6 +35,6 @@ class Expense extends Model
 
     public function payments()
     {
-        return $this->hasMany(Expense::class);
+        return $this->hasMany(Payment::class);
     }
 }

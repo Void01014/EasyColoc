@@ -36,7 +36,7 @@
                                     </div>
                                     <span class="text-[#dde5ff] font-medium">{{ $member->name }}</span>
                                     @if ($member->pivot->role === 'owner')
-                                    <span class="text-yellow-400 text-sm" title="Sector Lead">✦</span>
+                                        <span class="text-yellow-400 text-sm" title="Sector Lead">✦</span>
                                     @endif
                                 </div>
                                 @if (isset($settlements[$member->id]))
@@ -69,19 +69,20 @@
                                                     <div class="relative flex items-center">
                                                         @if ($settlement['amount'] > 0)
                                                             <div class="flex items-center">
-                                                                <div
-                                                                    class="w-8 h-[1px] bg-gradient-to-r from-emerald-500 to-transparent">
-                                                                </div>
                                                                 <div class="text-emerald-500 text-[10px] animate-pulse">
-                                                                    ▶
+                                                                    ◀
+                                                                </div>
+                                                                <div
+                                                                    class="w-8 h-[1px] bg-gradient-to-l from-emerald-500 to-transparent">
                                                                 </div>
                                                             </div>
                                                         @else
                                                             <div class="flex items-center">
-                                                                <div class="text-yellow-500 text-[10px] animate-pulse">◀
-                                                                </div>
                                                                 <div
-                                                                    class="w-8 h-[1px] bg-gradient-to-l from-yellow-500 to-transparent">
+                                                                    class="w-8 h-[1px] bg-gradient-to-r from-yellow-500 to-transparent">
+                                                                </div>
+                                                                <div class="text-yellow-500 text-[10px] animate-pulse">
+                                                                    ▶
                                                                 </div>
                                                             </div>
                                                         @endif
@@ -161,4 +162,5 @@
     </div>
     @livewire('group.invitemodal', ['group' => $activeGroup])
     @livewire('group.expensemodal', ['group' => $activeGroup, 'categories' => $categories])
+    @livewire('group.payment.expense-details-modal')
 </x-app-layout>

@@ -8,7 +8,7 @@ use function Livewire\Volt\{computed, state, mount, on};
 state(['group']);
 
 $expenses = computed(function () {
-    if (! $this->group) {
+    if (!$this->group) {
         return collect();
     }
 
@@ -29,7 +29,7 @@ on([
 
     <div class="space-y-4">
         @forelse($this->expenses as $expense)
-            <div
+            <div @click="$dispatch('open-expense-details', { expenseId: {{ $expense->id }} })"
                 class="group flex items-center justify-between p-5 bg-[#0d1136]/20 border border-[#6b82ff]/5 rounded-2xl hover:bg-[#6b82ff]/5 transition-all">
                 <div class="flex items-center gap-4">
                     <div
@@ -44,12 +44,9 @@ on([
                         </p>
                     </div>
                 </div>
-                <div class="text-right">
+                <div x-data={} class="text-right">
                     <p class="text-lg font-serif text-[#dde5ff]">
                         ${{ number_format($expense->amount, 2) }}</p>
-                    <button
-                        class="text-[9px] text-[#6b82ff] uppercase tracking-[0.2em] font-black opacity-0 group-hover:opacity-100 transition-opacity">View
-                        Details</button>
                 </div>
             </div>
         @empty

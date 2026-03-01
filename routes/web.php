@@ -14,7 +14,9 @@ Route::middleware('auth')->group(function () {
     Route::get('dashboard', [DashboardController::class, 'view'])->name('dashboard');
     Route::get('invitation/{token}', [InvitationController::class, 'view'])->name('invitation.view');
     Route::post('invitation/handleAction', [InvitationController::class, 'action'])->name('invitation.handle-invite');
+    Route
 });
+
 
 Route::view('profile', 'profile')
     ->middleware(['auth'])
