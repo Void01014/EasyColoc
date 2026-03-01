@@ -28,71 +28,91 @@
                     @foreach ($activeGroup->users as $member)
                         <div
                             class="relative p-6 bg-[#0d1136]/40 border border-[#6b82ff]/10 rounded-[32px] backdrop-blur-md">
-                            <div class="flex items-center gap-3 mb-6">
-                                <div
-                                    class="w-10 h-10 rounded-full bg-gradient-to-tr from-[#6b82ff] to-[#4d63f5] flex items-center justify-center text-white font-bold">
-                                    {{ substr($member->name, 0, 1) }}
-                                </div>
-                                <span class="text-[#dde5ff] font-medium">{{ $member->name }}</span>
-                                @if ($member->pivot->role === 'owner')
+                            <div class="flex items-center justify-between mb-6">
+                                <div class="flex items-center gap-3 mb-6">
+                                    <div
+                                        class="w-10 h-10 rounded-full bg-gradient-to-tr from-[#6b82ff] to-[#4d63f5] flex items-center justify-center text-white font-bold">
+                                        {{ substr($member->name, 0, 1) }}
+                                    </div>
+                                    <span class="text-[#dde5ff] font-medium">{{ $member->name }}</span>
+                                    @if ($member->pivot->role === 'owner')
                                     <span class="text-yellow-400 text-sm" title="Sector Lead">✦</span>
+                                    @endif
+                                </div>
+                                @if (isset($settlements[$member->id]))
+                                    @php
+                                        $balance = collect($settlements[$member->id])->sum('amount');
+                                    @endphp
+
+                                    <div class="text-right">
+                                        <span
+                                            class="block text-[10px] uppercase tracking-tighter text-[#82BDED] opacity-50 font-black mb-1">Net
+                                            Standing</span>
+                                        <div
+                                            class="px-3 py-1 rounded-lg {{ $balance >= 0 ? 'bg-emerald-500/10' : 'bg-yellow-500/10' }}">
+                                            <span
+                                                class="font-serif text-lg {{ $balance >= 0 ? 'text-emerald-400' : 'text-yellow-400' }}">
+                                                {{ $balance >= 0 ? '+' : '-' }}${{ number_format(abs($balance), 2) }}
+                                            </span>
+                                        </div>
+                                    </div>
                                 @endif
                             </div>
 
                             <div class="space-y-4">
                                 <div class="space-y-3">
-                                    @forelse ($settlements[$member->id] as $settlement)
-                                        <div
-                                            class="relative group flex items-center justify-between p-3 rounded-2xl bg-white/[0.02] border border-white/[0.05] hover:border-[#6b82ff]/30 hover:bg-[#6b82ff]/5 transition-all duration-300">
+                                    @if (isset($settlements[$member->id]))
+                                        @forelse ($settlements[$member->id] as $settlement)
+                                            <div
+                                                class="relative group flex items-center justify-between p-3 rounded-2xl bg-white/[0.02] border border-white/[0.05] hover:border-[#6b82ff]/30 hover:bg-[#6b82ff]/5 transition-all duration-300">
+                                                <div class="flex items-center gap-3">
+                                                    <div class="relative flex items-center">
+                                                        @if ($settlement['amount'] > 0)
+                                                            <div class="flex items-center">
+                                                                <div
+                                                                    class="w-8 h-[1px] bg-gradient-to-r from-emerald-500 to-transparent">
+                                                                </div>
+                                                                <div class="text-emerald-500 text-[10px] animate-pulse">
+                                                                    ▶
+                                                                </div>
+                                                            </div>
+                                                        @else
+                                                            <div class="flex items-center">
+                                                                <div class="text-yellow-500 text-[10px] animate-pulse">◀
+                                                                </div>
+                                                                <div
+                                                                    class="w-8 h-[1px] bg-gradient-to-l from-yellow-500 to-transparent">
+                                                                </div>
+                                                            </div>
+                                                        @endif
+                                                    </div>
 
-                                            <div class="flex items-center gap-3">
-                                                <div class="relative flex items-center">
-                                                    @if ($settlement['amount'] > 0)
-                                                        {{-- Energy Flow Out --}}
-                                                        <div class="flex items-center">
-                                                            <div
-                                                                class="w-8 h-[1px] bg-gradient-to-r from-emerald-500 to-transparent">
-                                                            </div>
-                                                            <div class="text-emerald-500 text-[10px] animate-pulse">▶
-                                                            </div>
-                                                        </div>
-                                                    @else
-                                                        {{-- Energy Flow In --}}
-                                                        <div class="flex items-center">
-                                                            <div class="text-yellow-500 text-[10px] animate-pulse">◀
-                                                            </div>
-                                                            <div
-                                                                class="w-8 h-[1px] bg-gradient-to-l from-yellow-500 to-transparent">
-                                                            </div>
-                                                        </div>
-                                                    @endif
+                                                    <div class="flex flex-col">
+                                                        <span
+                                                            class="text-[9px] uppercase tracking-widest text-[#3d4a7a] font-bold group-hover:text-[#82BDED] transition-colors">
+                                                            {{ $settlement['amount'] > 0 ? 'Receiving from' : 'Sending to' }}
+                                                        </span>
+                                                        <span class="text-xs text-[#dde5ff] font-medium tracking-tight">
+                                                            {{ $settlement['to_name'] }}
+                                                        </span>
+                                                    </div>
                                                 </div>
 
-                                                <div class="flex flex-col">
+                                                <div class="text-right">
                                                     <span
-                                                        class="text-[9px] uppercase tracking-widest text-[#3d4a7a] font-bold group-hover:text-[#82BDED] transition-colors">
-                                                        {{ $settlement['amount'] > 0 ? 'Receiving from' : 'Sending to' }}
-                                                    </span>
-                                                    <span class="text-xs text-[#dde5ff] font-medium tracking-tight">
-                                                        {{ $settlement['to_name'] }}
+                                                        class="font-serif text-sm {{ $settlement['amount'] > 0 ? 'text-emerald-400' : 'text-yellow-400' }} drop-shadow-[0_0_8px_rgba(107,130,255,0.2)]">
+                                                        ${{ number_format(abs($settlement['amount']), 2) }}
                                                     </span>
                                                 </div>
                                             </div>
-
-                                            <div class="text-right">
-                                                <span
-                                                    class="font-serif text-sm {{ $settlement['amount'] > 0 ? 'text-emerald-400' : 'text-yellow-400' }} drop-shadow-[0_0_8px_rgba(107,130,255,0.2)]">
-                                                    ${{ number_format(abs($settlement['amount']), 2) }}
-                                                </span>
-                                            </div>
-                                        </div>
-                                    @empty
+                                        @endforeach
+                                    @else
                                         <div class="py-6 flex flex-col items-center justify-center opacity-40">
                                             <span class="text-xl mb-1">✧</span>
                                             <p class="text-[10px] uppercase tracking-widest text-[#3d4a7a] font-bold">
                                                 Orbital Equilibrium</p>
                                         </div>
-                                    @endforelse
+                                    @endif
                                 </div>
                             </div>
                         </div>

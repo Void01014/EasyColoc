@@ -14,6 +14,10 @@ class Payment extends Model
         return $this->belongsTo(Expense::class);
     }
 
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
+
     public static function makePayments($members, $expense)
     {
         $totalMembers = count($members);
