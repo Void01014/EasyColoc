@@ -11,7 +11,7 @@ state([
     'categories' => [],
     'name' => '',
     'amount' => '',
-    'date' => date('Y-m-d'), // Added date state
+    'date' => date('Y-m-d'),
     'category_id' => '',
     'description' => '',
 ]);
@@ -19,7 +19,7 @@ state([
 rules([
     'name' => 'required|min:3|max:50',
     'amount' => 'required|numeric|min:0.01',
-    'date' => 'required|date', // Added date validation
+    'date' => 'required|date',
     'category_id' => 'required|exists:categories,id',
     'description' => 'nullable|string',
 ]);
@@ -34,7 +34,7 @@ $saveExpense = function () {
         'group_id' => $this->group->id,
         'name' => $this->name,
         'amount' => $this->amount,
-        'date' => $this->date, // Added to creation
+        'date' => $this->date,
         'category_id' => $this->category_id,
         'description' => $this->description,
     ]);
@@ -43,7 +43,7 @@ $saveExpense = function () {
 
 
     $this->dispatch('expense-saved');
-    $this->reset(['name', 'amount', 'date', 'category_id', 'description']); // Added date to reset
+    $this->reset(['name', 'amount', 'date', 'category_id', 'description']);
 };
 
 ?>

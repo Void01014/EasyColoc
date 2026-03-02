@@ -3,13 +3,10 @@
 use App\Models\Group;
 use function Livewire\Volt\{state, rules, dispatch};
 
-// Define state
 state(['name' => '']);
 
-// Define validation rules
 rules(['name' => 'required|min:3|max:50']);
 
-// Define the action
 $createSector = function () {
     $this->validate();
 

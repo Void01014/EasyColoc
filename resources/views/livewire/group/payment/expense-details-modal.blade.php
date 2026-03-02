@@ -13,10 +13,8 @@ state([
 
 on([
     'open-expense-details' => function ($expenseId) {
-        // Set loading state if you want a spinner
         $this->loading = true;
 
-        // Fetch fresh data from DB by ID instead of passing big objects
         $this->expense = Expense::with('category')->find($expenseId);
         $this->payments = Payment::where('expense_id', $expenseId)->with('user')->get();
 
@@ -27,12 +25,9 @@ on([
 $markAsPaid = function ($paymentId) {
     $payment = Payment::with('user')->find($paymentId);
 
-    // Use the fetched expense state for the check
     if ($payment) {
         $payment->update(['paid_at' => now()]);
-        $payment->user->increment('reputation');
 
-        // Refresh only the payments collection
         $this->payments = Payment::where('expense_id', $this->expense->id)->with('user')->get();
         $this->dispatch('payment-updated');
     }

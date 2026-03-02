@@ -1,7 +1,5 @@
 @php
-    /** * Mock Data for Preview
-     * In production, these will come from your Controller/Livewire component
-     */
+
     $totalDebt = 142.5;
     $reputation = 12;
 
