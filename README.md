@@ -19,10 +19,10 @@ This project is built using modern web technologies:
 
 Get a clear overview of your group's finances, recent transactions, and individual balances:
 
-![EasyColoc Dashboard](public/images/dashboard_mockup.png)
+![EasyColoc Dashboard](public/screenshots/dashboard_mockup.png)
 
 ### Optimized Divisions
 
 Let the smart algorithm calculate the most efficient way to settle debts between all members:
 
-![EasyColoc Split Calculation](public/images/split_calculation_mockup.png)
+![EasyColoc Split Calculation](public/screenshots/split_calculation_mockup.png)
